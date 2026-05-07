@@ -1,0 +1,16 @@
+# Railway / Nixpacks build config for the FastAPI backend
+
+[phases.setup]
+nixPkgs = ["python311", "gcc", "libffi"]
+
+[phases.install]
+cmds = [
+  "pip install --upgrade pip --quiet",
+  # Install CPU-only torch first so sentence-transformers doesn't pull GPU wheels (saves ~1.8 GB)
+  "pip install torch==$TORCH_VERSION --index-url https://download.pytorch.org/whl/cpu --quiet",
+  # Install everything else — grep skips the torch line so it doesn't re-download the GPU build
+  "grep -v '^torch' requirements.txt | pip install -r /dev/stdin --quiet"
+]
+
+[start]
+cmd = "bash start.sh"

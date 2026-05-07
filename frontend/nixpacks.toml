@@ -1,0 +1,10 @@
+# Railway / Nixpacks build config for the React frontend
+
+[phases.install]
+cmds = ["npm install"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "npx serve dist -l ${PORT:-3000} --single"
